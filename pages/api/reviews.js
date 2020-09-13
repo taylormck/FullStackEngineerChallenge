@@ -2,10 +2,12 @@
  * @file List all reviews
  */
 
-import db from '../../data/db'
+import {
+  getReviews,
+} from '../../service/review'
 
 async function get (req, res) {
-  const reviews = await db('reviews').select();
+  const reviews = await getReviews()
 
   res.status(200).send(reviews)
 }
@@ -13,7 +15,7 @@ async function get (req, res) {
 export default async (req, res) => {
   switch (req.method) {
     case 'GET':
-      get(req, res)
+      await get(req, res)
       break
 
     default:

@@ -1,11 +1,15 @@
 /**
- * @file Get a list of pending reviews
+ * @file Get a list of completed reviews for an employee
  */
 
-import { getPendingReviews } from '../../../service/review'
+import { getCompletedReviewsByReviewee } from '../../../../service/review'
 
 async function get (req, res) {
-  const reviews = await getPendingReviews()
+  const {
+    query: { id },
+  } = req
+
+  const reviews = await getCompletedReviewsByReviewee(id)
   
   res.status(200).send(reviews)
 }

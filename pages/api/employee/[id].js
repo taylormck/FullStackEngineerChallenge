@@ -2,22 +2,25 @@
  * @file Get info for user
  */
 
-import db from '../../../data/db'
+import { isUndefined } from 'lodash'
+
+import {
+  getEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from '../../../service/employee'
 
 async function get (req, res) {
   const {
-    query: { id }
+    query: { id },
   } = req
 
-  const employees = await db('employees')
-    .where({ id })
-    .select();
+  const employee = await getEmployee(id)
 
-  if (employees.length === 0) {
+  if (isUndefined(employee)) {
     res.status(404).end()
   }
   else {
-    const employee = employees[0]
     res.status(200).send(employee)
   }
 }
@@ -34,9 +37,7 @@ async function patch (req, res) {
   }
 
   try {
-    await db('employees')
-      .where({ id })
-      .update(employee)
+    await updateEmployee(id, employee)
   }
   catch (e) {
     // NOTE: Assuming our db is magic and never breaks, and that an error here
@@ -55,9 +56,7 @@ async function remove (req, res) {
   } = req
 
   try {
-    await db('employees')
-      .where({ id })
-      .del()
+    await deleteEmployee(id)
   }
   catch {
     // NOTE: Assuming our db is magic and never breaks, and that an error here
@@ -70,23 +69,20 @@ async function remove (req, res) {
 }
 
 export default async (req, res) => {
-  const { method } = req
-
-  switch (method) {
+  switch (req.method) {
     case 'GET':
-      get(req, res)
+      await get(req, res)
       break
     
     case 'PATCH':
-      patch(req, res)
+      await patch(req, res)
       break
 
     case 'DELETE':
-      remove(req, res)
+      await remove(req, res)
       break
 
     default:
-      res.status(405)
-      res.end()
+      res.status(405).end()
   }
 }

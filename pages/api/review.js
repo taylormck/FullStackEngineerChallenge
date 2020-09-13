@@ -4,7 +4,10 @@
 
 import { isUndefined } from 'lodash'
 
-import db from '../../data/db'
+import {
+  postReview,
+  submitReview,
+} from '../../service/review'
 
 async function post (req, res) {
   const {
@@ -28,7 +31,7 @@ async function post (req, res) {
   }
 
   try {
-    await db('reviews').insert(review)
+    await postReview(review)
   }
   catch {
     res.status(500).end()
@@ -47,17 +50,8 @@ async function patch (req, res) {
     },
   } = req
 
-  const review = {
-    reviewer_id,
-    reviewee_id,
-    content,
-    completed: true,
-  }
-  
   try {
-    await db('reviews')
-      .where({ reviewer_id, reviewee_id })
-      .update(review)
+    submitReview(reviewer_id, reviewee_id, content)
   }
   catch (e) {
     res.status(404).end()
@@ -72,11 +66,11 @@ export default async (req, res) => {
 
   switch (method) {
     case 'POST':
-      post(req, res)
+      await post(req, res)
       break
     
     case 'PATCH':
-      patch(req, res)
+      await patch(req, res)
       break
 
     default:

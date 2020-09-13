@@ -2,15 +2,11 @@
  * @file Get a list of completed reviews
  */
 
-import db from '../../../data/db'
+import { getCompletedReviews } from '../../../service/review'
 
 async function get (req, res) {
-  const reviews = await db('reviews')
-    .where({ completed: true })
-    .select()
+  const reviews = await getCompletedReviews()
   
-    console.log({ reviews })
-
   res.status(200).send(reviews)
 }
 
@@ -19,7 +15,7 @@ export default async (req, res) => {
 
   switch (method) {
     case 'GET':
-      get(req, res)
+      await get(req, res)
       break
 
     default:

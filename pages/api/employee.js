@@ -2,7 +2,7 @@
  * @file Get info for employees
  */
 
-import db from '../../data/db'
+import { addEmployee } from '../../service/employee'
 
 async function post (req, res) {
   const employee = req.body
@@ -14,9 +14,7 @@ async function post (req, res) {
   let insertedEmployeeId
 
   try {
-    insertedEmployeeId = await db('employees')
-      .returning('id')
-      .insert(employee)
+    insertedEmployeeId = await addEmployee(employee)
   } catch (e) {
     console.error('Error adding employee:', e)
     res.status(500).end()
@@ -32,7 +30,7 @@ export default async (req, res) => {
 
   switch (method) {
     case 'POST':
-      post(req, res)
+      await post(req, res)
       break
 
     default:
