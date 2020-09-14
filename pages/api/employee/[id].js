@@ -58,7 +58,9 @@ async function remove (req, res) {
   try {
     await deleteEmployee(id)
   }
-  catch {
+  catch (e) {
+    console.error('Error deleting emloyee:', e)
+
     // NOTE: Assuming our db is magic and never breaks, and that an error here
     // means that we couldn't find the entry to delete
     res.status(404).end()

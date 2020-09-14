@@ -10,6 +10,9 @@ import Container from '@material-ui/core/Container'
 import Card from '@material-ui/core/Card'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+  },
   cardContainer: {
     display: 'flex',
     flexFlow: 'row wrap',
@@ -43,7 +46,7 @@ export default function EmployeeReviews ({ employee }) {
   useEffect(() => { fetchCompletedReviews() }, [employee.id])
 
   return (
-    <div>
+    <div className={classNames.root}>
       <Typography variant="h2" align="center">
         Reviews for {employee.name}
       </Typography>

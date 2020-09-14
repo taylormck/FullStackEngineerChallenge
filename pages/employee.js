@@ -12,8 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import Container from '@material-ui/core/Container'
-import Card from '@material-ui/core/Card'
-import TextField from '@material-ui/core/TextField';
 
 import Layout from '../components/layout'
 import EmployeeReviews from '../components/employeeReviews'

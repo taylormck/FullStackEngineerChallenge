@@ -21,8 +21,6 @@ exports.up = knex => knex.schema
       .unsigned()
       .references('id')
       .inTable('employees')
-
-    t.unique(['reviewer_id', 'reviewee_id'])
   })
 
 exports.down = knex => knex.schema

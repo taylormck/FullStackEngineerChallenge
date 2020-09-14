@@ -2,12 +2,14 @@
  * @file Get info for employees
  */
 
+import { isUndefined } from 'lodash'
+
 import { addEmployee } from '../../service/employee'
 
 async function post (req, res) {
   const employee = req.body
 
-  if (!employee.name) {
+  if (isUndefined(employee.name) || employee.name === '') {
     res.status(422).end()
   }
 
