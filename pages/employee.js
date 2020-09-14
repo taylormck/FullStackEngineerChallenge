@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react'
+import { isUndefined } from 'lodash'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -11,10 +12,12 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import TextField from '@material-ui/core/TextField';
 
 import Layout from '../components/layout'
-import LinkWrapper from '../components/linkWrapper'
+import EmployeeReviews from '../components/employeeReviews'
+import EmployeePendingReviews from '../components/employeePendingReviews'
 
 import { getEmployees } from '../service/employee'
 
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   employeeInfo: {
     display: 'flex',
-    flexFlow: 'column nowrap',
+    flexFlow: 'row wrap',
     justifyContent: 'center',
     padding: 20,
   },
@@ -41,18 +44,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Employee({ employees }) {
   const classNames = useStyles()
 
-  const [employee, setEmployee] = useState({
-    id: '',
-    name: '',
-  })
+  const [employee, setEmployee] = useState()
 
   const handleChange = async event => {
     const newEmployeeId = event.target.value
+
     const response = await fetch(`/api/employee/${newEmployeeId}`)
 
     if (response.ok) {
       const newEmployeeData = await response.json()
-
       setEmployee(newEmployeeData)
     }
   }
@@ -69,7 +69,7 @@ export default function Employee({ employees }) {
           <Select
             labelId="employee-select-label"
             id="employee-select"
-            value={employee.id}
+            value={employee && employee.id ? employee.id : ''}
             onChange={handleChange}
           >
             {employees.map(e => (
@@ -82,14 +82,11 @@ export default function Employee({ employees }) {
             ))}
           </Select>
         </FormControl>
-        
-        <Button variant="contained" color="primary">
-          Go!
-        </Button>
       </Container>
 
       <Container className={classNames.employeeInfo}>
-        <Typography variant="body1">Name: {employee.name}</Typography>
+        {!isUndefined(employee) && <EmployeeReviews employee={employee} />}
+        {!isUndefined(employee) && <EmployeePendingReviews employee={employee} />}
       </Container>
     </Layout>
   )

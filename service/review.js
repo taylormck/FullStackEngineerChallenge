@@ -28,7 +28,7 @@ export async function getCompletedReviewsByReviewee (reviewee_id) {
       reviewee_id,
       completed: true,
     })
-    .select()
+    .pluck('content')
 
   return reviews
 }
